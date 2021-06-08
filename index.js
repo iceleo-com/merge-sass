@@ -43,19 +43,38 @@ function generateSheet(nodes) {
                 }
 
                 if (comment) {
-                    output[comment] = comment;
+                    if (output[comment] === undefined) {
+                        output[comment] = comment;
+                    } else {
+                        let i = 1;
+
+                        while (true) {
+                            const commentKey = `${comment}${i}`;
+                            if (output[commentKey] === undefined) {
+                                output[commentKey] = comment;
+                                break;
+                            }
+
+                            i++;
+                        }
+                    }
                 }
             } else if (element.type === 'rule') {
                 const selector = element.selector.replace(/(\\n|\s)+/g, ' ').replace(/\s+/, ' ').trim();
-
-                output[selector] = {
+                const rule = {
                     _selector: element.selector,
                     _raws: element.raws,
                     _nodes: {},
                 };
 
                 if (element.nodes && element.nodes.length) {
-                    output[selector]._nodes = generateSheet(element.nodes);
+                    rule._nodes = generateSheet(element.nodes);
+                }
+
+                if (output[selector] === undefined) {
+                    output[selector] = rule;
+                } else {
+                    output[selector] = merge(output[selector], rule);
                 }
             } else if (element.type === 'decl') {
                 output[element.prop] = {
@@ -64,15 +83,21 @@ function generateSheet(nodes) {
                     _value: element.value,
                 };
             } else if (element.type === 'atrule') {
-                let rule = `@${element.name} ${element.params}`;
-                output[rule] = {
-                    _rule: rule,
+                let query = `@${element.name} ${element.params}`;
+                const atrule = {
+                    _query: query,
                     _raws: element.raws,
                     _nodes: {},
                 };
 
                 if (element.nodes && element.nodes.length) {
-                    output[rule]._nodes = generateSheet(element.nodes);
+                    atrule._nodes = generateSheet(element.nodes);
+                }
+
+                if (output[query] === undefined) {
+                    output[query] = atrule;
+                } else {
+                    output[query] = merge(output[query], atrule);
                 }
             }
         }
@@ -107,11 +132,11 @@ function generateScss(nodes) {
                     }
                     content += `${element._selector} {`;
                     trailing = '}';
-                } else if (element._rule !== undefined) {
+                } else if (element._query !== undefined) {
                     if (content === '') {
                         content += "\n";
                     }
-                    content += `${element._rule} {`;
+                    content += `${element._query} {`;
                     trailing = '}';
                 } else if (element._property !== undefined && element._value !== undefined) {
                     content += `${element._property}: ${element._value}`;
