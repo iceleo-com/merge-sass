@@ -7,7 +7,18 @@
     <title>Merge SASS</title>
 </head>
 <body>
-    <script src="dist/webApp.js?v=1.0.1"></script>
-    <script src="webApp.js?v=1.0.1"></script>
+    <script>
+        function loadScript(url) {
+            var script = document.createElement('script');
+            script.src = url;
+            document.body.appendChild(script);
+        }
+
+        var now = new Date();
+        var today = '' + now.getFullYear() + '_' + now.getMonth() + '_' + now.getDate();
+
+        loadScript('dist/webApp.js?t=' + today);
+        loadScript('webApp.js?t=' + today);
+    </script>
 </body>
 </html>

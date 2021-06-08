@@ -22,6 +22,8 @@ textarea {
     resize: none;
     white-space: nowrap;
     overflow: auto;
+    border: 1px solid #cccccc;
+    box-shadow: 2px 5px 7px rgba(0, 0, 0, 0.4);
 }
 
 .container {
@@ -29,10 +31,14 @@ textarea {
 }
 
 .form {
-    display: flex;
+    @media (min-width: 801px) {
+        display: flex;
+    }
     margin: 0 -1rem;
     > div {
-        width: 50%;
+        @media (min-width: 801px) {
+            width: 50%;
+        }
         padding: 0 1rem;
     }
     textarea {

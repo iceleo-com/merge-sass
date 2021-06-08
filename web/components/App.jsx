@@ -20,11 +20,11 @@ class App extends Component {
                 <div className={styles.form}>
                     <div>
                         <h4 className={styles.heading}>Original SCSS</h4>
-                        <textarea ref={this.targetRef} defaultValue="" onChange={this.handleChange}></textarea>
+                        <textarea ref={this.targetRef} defaultValue="" placeholder="Enter your Original SCSS here" onChange={this.handleChange}></textarea>
                     </div>
                     <div>
-                        <h4 className={styles.heading}>Updating SCSS</h4>
-                        <textarea ref={this.sourceRef} defaultValue="" onChange={this.handleChange}></textarea>
+                        <h4 className={styles.heading}>Update SCSS</h4>
+                        <textarea ref={this.sourceRef} defaultValue="" placeholder="Enter your Update SCSS here" onChange={this.handleChange}></textarea>
                     </div>
                 </div>
                 <div className={styles.result}>
