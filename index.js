@@ -60,7 +60,7 @@ function generateSheet(nodes) {
                     }
                 }
             } else if (element.type === 'rule') {
-                const selector = element.selector.replace(/(\\n|\s)+/g, ' ').replace(/\s+/, ' ').trim();
+                const selector = element.selector.replace(/(\\n|\s|\n)+/g, ' ').replace(/\s+/, ' ').trim();
                 const rule = {
                     _selector: element.selector,
                     _raws: element.raws,
@@ -80,7 +80,7 @@ function generateSheet(nodes) {
                 output[element.prop] = {
                     _raws: element.raws,
                     _property: element.prop,
-                    _value: element.value,
+                    _value: `${element.value}${element.important ? ' !important' : ''}`,
                 };
             } else if (element.type === 'atrule') {
                 let query = `@${element.name} ${element.params}`;
@@ -108,6 +108,16 @@ function generateSheet(nodes) {
 
 function generateScss(nodes) {
     let output = '';
+    let declaredVars = '';
+
+    let firstNode = null;
+    Object.keys(nodes).forEach((key, id) => {
+        if (id === 0) {
+            firstNode = nodes[key];
+        }
+
+        return false;
+    });
 
     for (const key in nodes) {
         if (Object.hasOwnProperty.call(nodes, key)) {
@@ -117,6 +127,7 @@ function generateScss(nodes) {
                 output += element;
             } else {
                 let content = '';
+                let isVar = false;
 
                 if (element._raws) {
                     if (element._raws.before) {
@@ -127,20 +138,33 @@ function generateScss(nodes) {
                 let trailing = '';
 
                 if (element._selector !== undefined) {
-                    if (content === '') {
+                    if (content === '' && element !== firstNode) {
                         content += "\n";
                     }
                     content += `${element._selector} {`;
                     trailing = '}';
+
+                    if (element._selector.indexOf('%') === 0) {
+                        isVar = true;
+                    }
                 } else if (element._query !== undefined) {
-                    if (content === '') {
+                    if (content === '' && element !== firstNode) {
                         content += "\n";
                     }
-                    content += `${element._query} {`;
-                    trailing = '}';
+                    content += element._query;
+                    if (element._nodes && Object.keys(element._nodes).length) {
+                        content += ' {';
+                        trailing = '}';
+                    } else {
+                        trailing = ';';
+                    }
                 } else if (element._property !== undefined && element._value !== undefined) {
                     content += `${element._property}: ${element._value}`;
                     trailing = ';';
+
+                    if (element._property.indexOf('$') === 0) {
+                        isVar = true;
+                    }
                 }
 
                 if (element._nodes) {
@@ -154,26 +178,35 @@ function generateScss(nodes) {
                 }
 
                 content += trailing;
-                output += content;
+
+                if (isVar) {
+                    declaredVars += content;
+                } else {
+                    output += content;
+                }
             }
         }
     }
 
-    return output;
+    return `${declaredVars}${output}`;
 }
 
 function mergeSass(target, source) {
-    return generateScss(
-        merge(
-            generateSheet(scss.parse(target).nodes),
-            generateSheet(scss.parse(source).nodes),
-            {
-                ignoreKeys: [
-                    '_raws',
-                ],
-            }
-        )
-    );
+    try {
+        return generateScss(
+            merge(
+                generateSheet(scss.parse(target).nodes),
+                generateSheet(scss.parse(source).nodes),
+                {
+                    ignoreKeys: [
+                        '_raws',
+                    ],
+                }
+            )
+        ) + "\n";
+    } catch (error) {
+        return error.message;
+    }
 }
 
 export default mergeSass;
