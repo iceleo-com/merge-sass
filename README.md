@@ -3,7 +3,9 @@ This tool can merge non-compiled SASS
 
 # Installation
 `npm install merge-sass --save-dev`
-Online test: [https://iceleo-com.github.io/merge-sass/index.html](https://iceleo-com.github.io/merge-sass/index.html)
+
+# Online test
+[https://iceleo-com.github.io/merge-sass/index.html](https://iceleo-com.github.io/merge-sass/index.html)
 
 # Example
 ```

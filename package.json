@@ -10,6 +10,10 @@
   },
   "author": "Brat",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iceleo-com/merge-sass.git"
+  },
   "dependencies": {
     "core-js": "^3.14.0",
     "deepmerge": "^4.2.2",

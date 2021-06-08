@@ -191,7 +191,7 @@ function generateScss(nodes) {
     return `${declaredVars}${output}`;
 }
 
-function mergeSass(target, source) {
+export default function mergeSass(target = '', source = '') {
     try {
         return generateScss(
             merge(
@@ -208,5 +208,3 @@ function mergeSass(target, source) {
         return error.message;
     }
 }
-
-export default mergeSass;
