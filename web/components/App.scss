@@ -1,0 +1,55 @@
+* {
+    &,
+    &:before,
+    &:after {
+        box-sizing: border-box;
+        outline: 0;
+    }
+
+    &:active,
+    &:focus {
+        outline: 0;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    width: 100%;
+    resize: none;
+    white-space: nowrap;
+    overflow: auto;
+}
+
+.container {
+    padding: 0 1rem;
+}
+
+.form {
+    display: flex;
+    margin: 0 -1rem;
+    > div {
+        width: 50%;
+        padding: 0 1rem;
+    }
+    textarea {
+        height: calc(50vh - 30px);
+    }
+}
+
+.heading {
+    margin: 0;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.result {
+    margin-top: 1rem;
+    textarea {
+        height: calc(50vh - 4rem);
+        white-space: pre-wrap;
+    }
+}
