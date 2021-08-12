@@ -1,6 +1,6 @@
 {
   "name": "merge-sass",
-  "version": "1.0.0",
+  "version": "1.0.02",
   "description": "",
   "main": "dist/mergeSass.js",
   "scripts": {
@@ -14,6 +14,11 @@
     "type": "git",
     "url": "https://github.com/iceleo-com/merge-sass.git"
   },
+  "keywords": [
+    "sass",
+    "scss",
+    "merge"
+  ],
   "dependencies": {
     "core-js": "^3.14.0",
     "deepmerge": "^4.2.2",
